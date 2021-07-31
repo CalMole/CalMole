@@ -9,6 +9,7 @@
     "concurrently": "^6.2.0",
     "cookie-parser": "^1.4.5",
     "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "eslint": "^7.32.0",
     "googleapis": "^39.2.0",
@@ -21,7 +22,7 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "NODE_ENV=development concurrently \"nodemon server/server.js\" \"react-scripts start\"",
+    "start": "concurrently \"nodemon server/server.js\" \"react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -43,5 +44,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0"
+  },
+  "proxy": "http://localhost:5000"
 }
