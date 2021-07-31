@@ -15,19 +15,36 @@ class App extends Component {
   //   fetch('/auth/google').then(res=> console.log(res));
   // }
 
-  async auth () {
-    const res = await fetch("/auth/google");
-    // const data = await res.json()
-    console.log(res);
-    // store returned user somehow
+  // async auth () {
+  //   const res = await fetch("/auth/google");
+  //   // const data = await res.json()
+  //   console.log(res);
+  //   // store returned user somehow
+  // }
+
+  auth() {
+    // window.location.href = "/auth/google";
+    let headers = new Headers();
+
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Origin','http://localhost:3000');
+
+    fetch('/auth/google')
+        // mode: 'cors',
+        // credentials: 'include',
+    //     method: 'GET',
+    //     // headers: headers
+    // })
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(error => console.log('Authorization failed : ' + error.message));
   }
 
   render () {
     return (
       <div className="App">
-        <body>
           <LoginForm auth={this.auth} />
-        </body>
       </div>
     );
     }

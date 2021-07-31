@@ -1,6 +1,7 @@
 
 const path = require('path');
 const dotenv = require('dotenv')
+const cors = require('cors')
 const express = require('express');
 const app = express();
 var cookieParser = require('cookie-parser');
@@ -11,15 +12,43 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 // // Load config
 dotenv.config({path: path.join(__dirname, './config/config.env' )})
 
+console.log('request came in here!');
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+  });
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session({
+    resave: false,
+    saveUninitialized: true
+}));
 app.use(cookieSession({
     name: 'session',
     keys: ['key1','key2'],
 }))
+
+console.log('request came in here 2');
+passport.use(new GoogleStrategy({
+    clientID: '366734958535-jj77akvpkh0vq6k0telp9elm42iv0cn5.apps.googleusercontent.com',
+    clientSecret: 'dXtJfgY64PXA1wQBb-eRXnED',
+    callbackURL: "http://localhost:3000/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    //   return cb(err, user);
+    // });
+    console.log('access toke', accessToken);
+    console.log('refresh toke', refreshToken);
+    console.log('profile', profile);
+    return cb(null, profile);
+  }
+));
+
 
 
 // Route all api calls to the api router
