@@ -1,4 +1,7 @@
-pool.query(
+const { Pool } = require('pg');
+
+
+Pool.query(
     "INSERT INTO company (id, firstname, lastname, email) VALUES(default, 'givenName', 'familyName' , 'emails'[0])",
     (err, res) => {
       console.log(err, res);
@@ -6,13 +9,13 @@ pool.query(
     }
   );
 
+
   company.getUser = (req, res, next) => {
-   
-    const Users ={ 
+    const Users ={
     }
     db.query(Users)
       .then((result) => {
-        res.locals = Users;
+        res.locals.user = Users;
         return next();
       })
       .catch((err) => next(err));

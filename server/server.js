@@ -1,7 +1,7 @@
-const app = express();
 const path = require('path');
 const dotenv = require('dotenv')
 const express = require('express');
+const app = express();
 var cookieParser = require('cookie-parser');
 const apiRouter = require('./router/api');
 const passport = require('passport');
@@ -27,17 +27,21 @@ app.use(cookieSession({
 app.use('/api', apiRouter);
 
 //oauth
-passport.use(new GoogleStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/callback"
-  },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return cb(err, user);
-    });
-  }
-));
+// passport.use(new GoogleStrategy({
+//     clientID: process.env.CLIENT_ID,
+//     clientSecret: process.env.CLIENT_SECRET,
+//     callbackURL: "http://localhost:3000/auth/google/callback"
+//   },
+//   function(accessToken, refreshToken, profile, cb) {
+//     User.findOrCreate({ googleId: profile.id }, function (err, user) {
+//       return cb(err, user);
+//     });
+//   }
+// ));
+
+app.get('/', (req,res) => {
+    return res.status(200).sendFile()
+})
 
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events'] }));
