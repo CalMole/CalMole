@@ -24,7 +24,6 @@ app.use(cookieSession({
 
 // Route all api calls to the api router
 app.use('/api', apiRouter);
-
 //oauth
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_SECRET,
