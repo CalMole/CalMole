@@ -1,0 +1,6 @@
+.card {
+    display: flex;
+    justify-content: center;
+    border-width: 2px;
+} 
+
