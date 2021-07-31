@@ -14,7 +14,7 @@ class LoginForm extends React.Component{
             <div className="card-body">
               <h2 className="card-title">Welcome to CalMole</h2>
               <h6 className="card-subtitle mb-2 text-muted">Continue with:</h6>
-                    <button type="button" className="btn btn-primary">Continue with Google</button>
+                    <button type="button" onClick={this.props.auth} className="btn btn-primary">Continue with Google</button>
                     <button type="button" className="btn btn-dark">Continue with Apple</button>
                     <button type="button" className="btn btn-light">Continue with Outlook</button>
             </div>
