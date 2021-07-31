@@ -8,14 +8,20 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.auth = this.auth.bind(this);
   }
 
-  auth() {
-    fetch('/auth/google').then((err, res) => {
-      if (err) console.log(err);
-      console.log(res);
-    })
+  // auth() {
+  //   fetch('/auth/google').then(res=> console.log(res));
+  // }
+
+  async auth () {
+    const res = await fetch("/auth/google");
+    // const data = await res.json()
+    console.log(res);
+    // store returned user somehow
   }
+
   render () {
     return (
       <div className="App">

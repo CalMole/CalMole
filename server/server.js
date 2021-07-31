@@ -1,3 +1,4 @@
+
 const path = require('path');
 const dotenv = require('dotenv')
 const express = require('express');
@@ -7,10 +8,8 @@ const apiRouter = require('./router/api');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-require('./passport-setup');
 // // Load config
-dotenv.config({path: './config/config.env' })
-
+dotenv.config({path: path.join(__dirname, './config/config.env' )})
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -39,20 +38,21 @@ app.use('/api', apiRouter);
 //   }
 // ));
 
-app.get('/', (req,res) => {
-    return res.status(200).sendFile()
-})
+// app.get('/', (req,res) => {
+//     return res.status(200).sendFile()
+// })
 
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events'] }));
- 
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', { scope: ['profile'] }));
+ // 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events'
+app.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/bad' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.redirect('/');
+    res.json('you made it');
   });
 
+app.get("/bad",(req, res) => res.json('failed'));
 // catch-all route handler for any requests to an unknown route
 app.use((req, res) => res.status(404).send('404 Fail whale'));
 
@@ -74,13 +74,3 @@ app.listen(process.env.PORT, () => {
 });
 
 module.exports = app;
-
-
-
-
-
-
-
-
-
-

@@ -10,21 +10,24 @@ passport.use(new GoogleStrategy({
     clientSecret: 'dXtJfgY64PXA1wQBb-eRXnED',
     callbackURL: "http://localhost:3000/auth/google/callback"
   },
-  function(accessToken, refreshToken, profile, done) {
+  function(accessToken, refreshToken, profile, cb) {
     // User.findOrCreate({ googleId: profile.id }, function (err, user) {
     //   return cb(err, user);
     // });
-    return done(null, profile);
+    console.log('access toke', accessToken);
+    console.log('refresh toke', refreshToken);
+    console.log('profile', profile);
+    return cb(null, profile);
   }
 ));
 
-passport.serializeUser(function(user, done) {
-    done(null, user);
+passport.serializeUser(function(user, cb) {
+    cb(null, user);
   });
   
-  passport.deserializeUser(function(user, done) {
+  passport.deserializeUser(function(user, cb) {
     // User.findById(id, function(err, user) {
-      done(null, user);
+      cb(null, user);
     // });
   });
 
