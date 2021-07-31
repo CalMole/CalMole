@@ -1,18 +1,30 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import LoginForm from './pages/login';
 import './Styles/App.css';
 import './Styles/loginpage.css';
 
 
-function App() {
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-  return (
-    <div className="App">
-      <body>
-        <LoginForm />
-      </body>
-    </div>
-  );
+  auth() {
+    fetch('/auth/google').then((err, res) => {
+      if (err) console.log(err);
+      console.log(res);
+    })
+  }
+  render () {
+    return (
+      <div className="App">
+        <body>
+          <LoginForm auth={this.auth} />
+        </body>
+      </div>
+    );
+    }
 }
 
 export default App;
