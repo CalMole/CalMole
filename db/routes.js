@@ -8,7 +8,8 @@ pool.query(
 
   company.getUser = (req, res, next) => {
    
-    const Users ={}
+    const Users ={ 
+    }
     db.query(Users)
       .then((result) => {
         res.locals = Users;
