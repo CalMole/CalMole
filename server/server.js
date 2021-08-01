@@ -14,10 +14,14 @@ dotenv.config({path: path.join(__dirname, './config/config.env' )})
 
 console.log('request came in here!');
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-  });
+app.all('*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE')
+  res.header('Access-Control-Allow-Headers', 'Content-type, Authorization')
+  next()
+})
+
+app.use(express.static('/home/grosso63/my-app/build'))
 app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -36,7 +40,8 @@ console.log('request came in here 2');
 passport.use(new GoogleStrategy({
     clientID: '366734958535-jj77akvpkh0vq6k0telp9elm42iv0cn5.apps.googleusercontent.com',
     clientSecret: 'dXtJfgY64PXA1wQBb-eRXnED',
-    callbackURL: "http://localhost:3000/auth/google/callback"
+    callbackURL: "http://localhost:5000/auth/google/callback",
+    passReqToCallback: true
   },
   function(accessToken, refreshToken, profile, cb) {
     // User.findOrCreate({ googleId: profile.id }, function (err, user) {
@@ -78,8 +83,9 @@ app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/bad' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.json('you made it');
+    res.redirect('/');
   });
+app.get('/good', (req, res)=> res.json('yay'));
 
 app.get("/bad",(req, res) => res.json('failed'));
 // catch-all route handler for any requests to an unknown route
