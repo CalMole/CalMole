@@ -23,22 +23,22 @@ class App extends Component {
   // }
 
   auth() {
-    // window.location.href = "/auth/google";
-    let headers = new Headers();
+    window.location.href = "/auth/google";
+    // let headers = new Headers();
 
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Origin','http://localhost:3000');
+    // headers.append('Content-Type', 'application/json');
+    // headers.append('Accept', 'application/json');
+    // headers.append('Origin','http://localhost:3000');
 
-    fetch('/auth/google')
+   // fetch('http://localhost:5000/auth/google')
         // mode: 'cors',
         // credentials: 'include',
     //     method: 'GET',
     //     // headers: headers
     // })
-    .then(response => response.json())
-    .then(json => console.log(json))
-    .catch(error => console.log('Authorization failed : ' + error.message));
+    //.then(response => response.json())
+    //.then(json => console.log(json))
+    //.catch(error => console.log('Authorization failed : ' + error.message));
   }
 
   render () {
