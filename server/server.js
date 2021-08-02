@@ -94,6 +94,10 @@ app.get('/', (req, res) => {
   console.log(path.resolve(__dirname, '../build/index.html'));
   res.status(200).sendFile(path.resolve(__dirname, 'build/index.html'))
 })
+
+app.get('/getEvents', eventController.getEvents, (req, res) => {
+  res.status(200).json(res.locals.events);
+})
 // Route all api calls to the api router
 app.use('/api', apiRouter);
 

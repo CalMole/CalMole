@@ -1,7 +1,6 @@
 const { query } = require('../../db/db.js');
 const pool = require('../../db/db.js');
 const {google} = require('googleapis');
-var googleAuth = require('google-auth-library');
 
 // Declare empty event controller obj
 const eventController = {};
@@ -89,8 +88,7 @@ eventController.pushCalEvents = async(accessToken, profile) => {
         ]
         let query = `
         INSERT INTO raw_cal_events( id, insertion_timestamp, event_created_ts, event_updated_ts, event_start_ts, event_end_ts, cal_owner_user_id, status, event_summary, event_creator_email, event_organizer_email )
-        VALUES (DEFAULT, current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT IGNORE
-        RETURNING *`
+        VALUES (DEFAULT, current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`
         pool.query(
           query,params, (err, res) => {
               console.log(err, res);
@@ -99,5 +97,32 @@ eventController.pushCalEvents = async(accessToken, profile) => {
     }
   )
 }
+
+eventController.getEvents = (req, res, next) => {
+  function converter(val) {
+    const start = new Date('2021-08-20T13:30:00-04:00');
+    console.log(start.getHours());
+  
+    const newObj = {
+      hoursmins: {
+        h: Number(start.getHours()),
+        m: Number(start.getMinutes()),
+      },
+      date: Number(start.getDay()),
+    };
+    return newObj;
+  }
+  pool.query(
+   'SELECT * FROM raw_cal_events', (err, data) => {
+     if(err)return next(err)
+     data.map(el => {
+       el.formattedStart = converter(el.event_start_ts);
+       el.formattedEnd = converter(el.event_end_ts)
+       return el
+     })
+     res.locals.events = data;
+   }
+  )
+} 
 
 module.exports = eventController
