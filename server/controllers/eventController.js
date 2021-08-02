@@ -156,7 +156,7 @@ eventController.analyzeEvents = (req, res, next) => {
         el.formattedEnd = converter(el.event_end_ts)
         return el
       })
-      res.locals.events = data;
+      res.locals.newEvents = data;
     }
   }
 
