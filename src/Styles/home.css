@@ -1,0 +1,44 @@
+@import "~react-week-calendar/dist/style.css";
+
+
+
+.home {
+    display: flex;
+}
+
+.NavBar {
+    display: flex;
+    justify-content: end;
+}
+
+h3 {
+    /* border: solid 2px black; */
+    margin-top: 60px;
+
+}
+.calendar {
+    height: auto;
+    width: auto;
+}
+
+.week {
+    width: 100%;
+    height: 48%;
+}
+
+.batchButton {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 5%;
+}
+
+.batchPotential {
+    display: flex;
+    justify-content: center;
+    padding-top: 4%;
+    padding-bottom: 5%;
+}
+
+.card {
+    width: 18rem;
+}
