@@ -40,7 +40,7 @@ async function(accessToken, refreshToken, profile, done) {
   console.log('access toke', accessToken);
   console.log('refresh token', refreshToken)
   console.log('profile', profile);
-  
+
   //add user to db with their access token for future api calls
   try {
   await eventController.addUser(profile, accessToken, refreshToken);
@@ -48,7 +48,7 @@ async function(accessToken, refreshToken, profile, done) {
   } catch (err) {
     console.log(err);
   }
-  
+
   return done(null, {
     profile: profile,
     accessToken: accessToken,
@@ -79,7 +79,7 @@ app.get('/auth/google/callback',
   function(req, res) {
     console.log('done')
     // Successful authentication, redirect home.
-   
+
   });
 
 //dummy routes to see if auth worked!
@@ -98,6 +98,11 @@ app.get('/', (req, res) => {
 app.get('/getEvents', eventController.getEvents, (req, res) => {
   res.status(200).json(res.locals.events);
 })
+
+app.get('/calendarComparison', eventController.analyzeEvents, eventController.newEvents, (req, res) => {
+  res.status(200).json(res.locals.newEvents);
+})
+
 // Route all api calls to the api router
 app.use('/api', apiRouter);
 
