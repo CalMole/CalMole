@@ -37,14 +37,17 @@ async function(accessToken, refreshToken, profile, done) {
   // User.findOrCreate({ googleId: profile.id }, function (err, user) {
   //   return cb(err, user);
   // });
+  console.log('access toke', accessToken);
+  console.log('refresh token', refreshToken)
+  console.log('profile', profile);
+  
   //add user to db with their access token for future api calls
   try {
-  await eventController.addUser(profile, accessToken);
+  await eventController.addUser(profile, accessToken, refreshToken);
+  await eventController.pushCalEvents(accessToken, profile);
   } catch (err) {
     console.log(err);
   }
-  console.log('access toke', accessToken);
-  console.log('profile', profile);
   
   return done(null, {
     profile: profile,
@@ -67,7 +70,9 @@ console.log('made it just before redirect');
 
 //passport routes
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events'] }));
+  passport.authenticate('google', { scope: ['profile', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events'], accessType: 'offline',
+  prompt: 'consent'
+ }));
 // ^^ provides read write access to user calendars and events within calendar, see https://developers.google.com/calendar/api/guides/auth
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/loginfailure', successRedirect: '/' }),
