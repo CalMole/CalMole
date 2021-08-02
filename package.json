@@ -13,6 +13,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "eslint": "^7.32.0",
+    "google-auth-library": "^3.1.2",
     "googleapis": "^39.2.0",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
