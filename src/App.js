@@ -50,7 +50,7 @@ class App extends Component {
     return (
       <div className="App">
         {/* <LoginForm auth={this.auth} /> */}
-        <Comparison />
+        <Home />
       </div>
     );
   }

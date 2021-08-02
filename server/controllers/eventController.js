@@ -1,6 +1,7 @@
 const { query } = require('../../db/db.js');
 const pool = require('../../db/db.js');
 const {google} = require('googleapis');
+const fs = require('fs')
 
 // Declare empty event controller obj
 const eventController = {};
@@ -102,7 +103,7 @@ eventController.getEvents = (req, res, next) => {
   function converter(val) {
     const start = new Date(val);
     console.log(start.getHours());
-  
+
     const newObj = {
       hoursmins: {
         h: Number(start.getHours()),
@@ -117,12 +118,46 @@ eventController.getEvents = (req, res, next) => {
      if(err)return next(err)
      data.map(el => {
        el.formattedStart = converter(el.event_start_ts);
-       el.formattedEnd = converter(el.event_end_ts)
+       el.formattedEnd = converter(el.event_end_ts);
        return el
      })
      res.locals.events = data;
    }
   )
-} 
+}
+
+
+// Analyzes events from the raw_cal_events table
+eventController.analyzeEvents = (req, res, next) => {
+  const analysisSql = fs.readFileSync('../../db/events_analytics.sql').toString();
+  pool.query(analysisSql, (err, res) => {
+    console.log(err, 'data successfully analyzed');
+  })}
+
+
+  // Gets proposed new events from analytics events table
+  eventController.newEvents = (req, res, next) => {
+    res.locals.currentEvents = pool.query(`
+    SELECT
+    event_summary,
+    event_creator_email,
+    new_start_ts AS event_start_ts,
+    new_end_ts AS event_end_ts,
+    recovered_focus_time
+
+    FROM events_analytics
+
+    WHERE new_start_ts > current_timestamp - interval '8' day
+    AND new_start_ts < current_timestamp + interval '8' day
+    `, (err, data) => {
+      if(err)return next(err)
+      data.map(el => {
+        el.formattedStart = converter(el.event_start_ts);
+        el.formattedEnd = converter(el.event_end_ts)
+        return el
+      })
+      res.locals.newEvents = data;
+    }
+    )}
 
 module.exports = eventController
