@@ -1,0 +1,64 @@
+.comparison {
+    display: flex;
+    justify-content: center;
+}
+
+.comparisonweek {
+    width: 100%;
+    height: 100%;
+}
+
+.nav {
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+
+/* .comparison {
+    display: grid;
+    grid-template-columns: 24% 24% 24% 24%;
+    grid-template-rows: 15% 50%;
+    grid-template-areas: 
+        "header  header header header"
+        "cur cur  rec rec"
+        /* "carda  cardb  cardc"
+        "cardd  carde  cardf" 
+}*/
+
+/* .NavBar {
+    grid-area: header;
+}
+
+.current {
+    grid-area: cur;
+}
+
+.recommended {
+    grid-area: rec;
+}
+
+.card-a {
+    grid-area: carda;
+}
+.card-b {
+    grid-area: cardb;
+}
+.card-c {
+    grid-area: cardc;
+}
+.card-d {
+    grid-area: cardd;
+}
+.card-e {
+    grid-area: carde;
+}
+.card-f {
+    grid-area: cardf;
+} */ 
+
+
+
+
+
+
