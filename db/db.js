@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 const path = require('path');
-const apiRouter = require('../server/router/api.js'); // This is due to be removed if we don't need to call apiRouter into this file
+//const apiRouter = require('../server/router/api.js'); // This is due to be removed if we don't need to call apiRouter into this file
 const dotenv = require('dotenv');
 dotenv.config({path: path.join(__dirname, '../server/config/config.env' )});
 
