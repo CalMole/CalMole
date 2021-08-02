@@ -4,13 +4,27 @@ const pool = require('../../db/db.js');
 // Declare empty event controller obj
 const eventController = {};
 
+//store user in db with token
+eventController.addUser = (profile, accessToken) => {
+  pool.query(`INSERT INTO users(
+    id,
+    first_name,
+    last_name,
+    token)VALUES(
+      '${profile.id}',
+      '${profile.name.givenName}',
+      '${profile.name.familyName}',
+      '${accessToken}'
+  )`)
+}
+
 // TODO: Currently commented out for the next step in the project (bringing in the google API data)
 // Get the calendar events from the Google calendar api
-// eventController.getCalEvents = (req, res, next) => {
-//   const getEvents = [{date: '26/09/21', name: 'Michael\'s Birthday'},{date: '27/09/21', name: 'Day After Michael\'s Birthday'}]
-//   res.locals.events = getEvents;
-//   next();
-// }
+eventController.getCalEvents = (req, res, next) => {
+  const getEvents = [{date: '26/09/21', name: 'Michael\'s Birthday'},{date: '27/09/21', name: 'Day After Michael\'s Birthday'}]
+  res.locals.events = getEvents;
+  next();
+}
 
 // Push the calendar events to the event database
 eventController.pushCalEvents = (req, res, next) => {

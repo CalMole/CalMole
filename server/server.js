@@ -1,6 +1,7 @@
 
 const path = require('path');
 const dotenv = require('dotenv')
+const eventController = require(path.resolve(__dirname, './controllers/eventController'));
 const cors = require('cors')
 const express = require('express');
 const app = express();
@@ -32,14 +33,19 @@ passport.use(new GoogleStrategy({
   clientSecret: process.env.CLIENT_SECRET,
   callbackURL: `http://localhost:${process.env.PORT}/auth/google/callback`,
 },
-function(accessToken, refreshToken, profile, done) {
+async function(accessToken, refreshToken, profile, done) {
   // User.findOrCreate({ googleId: profile.id }, function (err, user) {
   //   return cb(err, user);
   // });
-
+  //add user to db with their access token for future api calls
+  try {
+  await eventController.addUser(profile, accessToken);
+  } catch (err) {
+    console.log(err);
+  }
   console.log('access toke', accessToken);
-  console.log('refresh toke', refreshToken);
   console.log('profile', profile);
+  
   return done(null, {
     profile: profile,
     accessToken: accessToken,
@@ -61,10 +67,10 @@ console.log('made it just before redirect');
 
 //passport routes
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile'] }));
- // 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events'
+  passport.authenticate('google', { scope: ['profile', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events'] }));
+// ^^ provides read write access to user calendars and events within calendar, see https://developers.google.com/calendar/api/guides/auth
 app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/bad', successRedirect: '/good' }),
+  passport.authenticate('google', { failureRedirect: '/loginfailure', successRedirect: '/' }),
   function(req, res) {
     console.log('done')
     // Successful authentication, redirect home.
@@ -72,9 +78,7 @@ app.get('/auth/google/callback',
   });
 
 //dummy routes to see if auth worked!
-app.get('/good', (req, res)=> res.send('yay'));
-
-app.get("/bad",(req, res) => res.send('failed'));
+app.get("/loginfailure",(req, res) => res.send('Authentication failed. Please return to homepage and try again.'));
 app.use(express.static(path.resolve(__dirname, '../build')))
 
 console.log('request came in here 2');
