@@ -100,7 +100,7 @@ eventController.pushCalEvents = async(accessToken, profile) => {
 
 eventController.getEvents = (req, res, next) => {
   function converter(val) {
-    const start = new Date('2021-08-20T13:30:00-04:00');
+    const start = new Date(val);
     console.log(start.getHours());
   
     const newObj = {
