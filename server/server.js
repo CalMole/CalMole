@@ -1,4 +1,3 @@
-
 const path = require('path');
 const dotenv = require('dotenv')
 const eventController = require(path.resolve(__dirname, './controllers/eventController'));
@@ -75,9 +74,10 @@ app.get('/auth/google',
  }));
 // ^^ provides read write access to user calendars and events within calendar, see https://developers.google.com/calendar/api/guides/auth
 app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/loginfailure', successRedirect: '/' }),
+  passport.authenticate('google', { failureRedirect: '/loginfailure'}),
   function(req, res) {
-    console.log('done')
+    console.log(path.resolve(__dirname, '../build/index.html'));
+    res.redirect('http://localhost:3000/home');
     // Successful authentication, redirect home.
 
   });
@@ -94,38 +94,7 @@ app.get('/', (req, res) => {
   console.log(path.resolve(__dirname, '../build/index.html'));
   res.status(200).sendFile(path.resolve(__dirname, 'build/index.html'))
 })
-
-app.get('/getEvents', eventController.getEvents, (req, res) => {
-  res.status(200).json(res.locals.events);
-})
-
-app.get('/calendarComparison', eventController.analyzeEvents, eventController.newEvents, (req, res) => {
-  res.status(200).json(res.locals.newEvents);
-})
-
-// Route all api calls to the api router
-app.use('/api', apiRouter);
-
-
-
-// catch-all route handler for any requests to an unknown route
-app.use((req, res) => res.status(404).send('404 Fail whale'));
-
-// Generic error handling
-app.use((err, req, res, next) => {
-  const defaultErr = {
-    log: 'Express error handler caught unknown middleware error',
-    status: 500,
-    message: { err: 'An error occurred' },
-  };
-  const errorObj = Object.assign({}, defaultErr, err);
-  console.log(errorObj.log);
-  return res.status(errorObj.status).json(errorObj.message);
-});
-
-// Spin up server listening on port in config
-app.listen(process.env.PORT, () => {
-  console.log(`Server listening on port: ${process.env.PORT}...`);
-});
-
-module.exports = app;
+app.get('/home', (req, res) => {
+  console.log(path.resolve(__dirname, '../build/index.html'));
+  res.status(200).sendFile(path.resolve(__dirname, 'build/index.html'))
+... (42 lines left)

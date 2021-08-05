@@ -1,4 +1,5 @@
 import React, { Component, useState, useEffect } from "react";
+import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import LoginForm from "./pages/login";
 import Home from "./pages/home";
 import Week from "./components/week";
@@ -7,7 +8,6 @@ import "./Styles/App.css";
 import "./Styles/loginpage.css";
 import "./Styles/home.css";
 import "./Styles/comparison.css";
-
 
 class App extends Component {
   constructor(props) {
@@ -48,12 +48,25 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        {/* <LoginForm auth={this.auth} /> */}
-        <Home />
+      <div className="router">
+        <Router>
+          <Switch>
+            <Route
+              exact
+              path="/"
+              component={() => <LoginForm auth={this.auth} />}
+            />
+            <Route exact path="/home" component={Home} />
+            <Route exact path="/comparison" component={Comparison} />
+          </Switch>
+        </Router>
       </div>
     );
   }
 }
+// return (
+//   <div className="App">
+//     {/* <LoginForm auth={this.auth} /> */}
+//     <LoginForm auth={this.auth} />
 
 export default App;
