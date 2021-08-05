@@ -2,55 +2,41 @@ import React from "react";
 import moment from "moment";
 import WeekCalendar from "react-week-calendar";
 
-class Week extends React.Component {
+class ComparisonWeek extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      lastUid: 4,
-      selectedIntervals: [
-        {
-          uid: 1,
-          start: moment({ h: 10, m: 5 }),
-          end: moment({ h: 12, m: 5 }),
-          value: "Booked by Smith",
-        },
-        {
-          uid: 2,
-          start: moment({ h: 13, m: 0 }).add(2, "d"),
-          end: moment({ h: 13, m: 45 }).add(2, "d"),
-          value: "Closed",
-        },
-        {
-          uid: 3,
-          start: moment({ h: 11, m: 0 }),
-          end: moment({ h: 14, m: 0 }),
-          value: "Reserved by White",
-        },
-      ],
+      lastUid: 0,
+      selectedIntervals: [],
     };
   }
-
   componentDidMount() {
-    fetch("/getEvents")
+    fetch("http://localhost:5000/calendarComparison")
       .then((res) => res.json())
       .then((data) => {
-        this.setState(state => {
+        this.setState((state) => {
           let newUid = state.lastUid;
           let newIntervals = state.selectedIntervals;
           for (let i = 0; i < data.length; i++) {
             newIntervals.push({
               uid: newUid++,
-              start: moment(data[i].formattedStart.hoursmins).add(data[i].formattedStart.date, "d"),
-              end: moment(data[i].formattedEnd.hoursmins).add(data[i].formattedStart.date, "d"),
-              value: data[i].event_summary
-            })
+              start: moment(data[i].formattedStart.hoursmins).add(
+                data[i].formattedStart.date,
+                "d"
+              ),
+              end: moment(data[i].formattedEnd.hoursmins).add(
+                data[i].formattedStart.date,
+                "d"
+              ),
+              value: data[i].event_summary,
+            });
           }
           return {
             ...state,
             lastUid: newUid,
-            selectedIntervals: newIntervals
-          }
-        })
+            selectedIntervals: newIntervals,
+          };
+        });
       })
       .catch((err) =>
         console.log("Events.componentDidmount: get Events: Error:", err)
@@ -109,4 +95,4 @@ class Week extends React.Component {
   }
 }
 
-export default Week;
+export default ComparisonWeek;
